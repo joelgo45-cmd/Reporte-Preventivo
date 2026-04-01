@@ -258,7 +258,6 @@ td{padding:8px 11px;font-size:.77rem;color:var(--text);vertical-align:top;}
 <div class="nav">
   <button class="nb on" onclick="goTab(this,'form')">🔧 Nuevo Hallazgo</button>
   <button class="nb" onclick="goTab(this,'db')">🗄️ Historial</button>
-  <button class="nb" onclick="goTab(this,'share')">🔗 Compartir</button>
 </div>
 
 <!-- ═══════════════════════════ FORMULARIO ═══════════════════════════ -->
@@ -434,50 +433,6 @@ td{padding:8px 11px;font-size:.77rem;color:var(--text);vertical-align:top;}
     </div>
   </div>
 </div>
-
-<!-- ═══════════════════════════ COMPARTIR ═══════════════════════════ -->
-<div class="pnl" id="pnl-share">
-  <div class="fw">
-    <div class="sec" style="margin-top:16px;">
-      <div class="sh">🔗 Link para compartir</div>
-      <p style="font-size:.8rem;color:var(--sub);line-height:1.6;margin-bottom:14px;">
-        Comparte este archivo HTML con otros técnicos. Cualquier persona que lo abra desde su celular
-        podrá registrar hallazgos que se guardarán automáticamente en el mismo Google Sheets.
-      </p>
-      <div style="background:var(--s2);border:1px solid var(--b2);border-radius:10px;padding:14px;margin-bottom:12px;">
-        <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;">📁 Opción 1 — Compartir el archivo HTML</div>
-        <p style="font-size:.78rem;color:var(--lbl);line-height:1.6;">
-          Envía el archivo <code style="background:var(--s1);padding:2px 6px;border-radius:4px;font-size:.75rem;">rt-envases-universales.html</code>
-          por WhatsApp o correo. El receptor lo abre en Chrome y funciona de inmediato.
-        </p>
-        <button class="btn btn-share" style="margin-top:10px;" onclick="compartirArchivo()">
-          📤 Compartir por WhatsApp
-        </button>
-      </div>
-      <div style="background:var(--s2);border:1px solid var(--b2);border-radius:10px;padding:14px;margin-bottom:12px;">
-        <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;">☁️ Opción 2 — Subir a GitHub Pages (link permanente)</div>
-        <p style="font-size:.78rem;color:var(--lbl);line-height:1.6;">
-          Sube el HTML a GitHub Pages y obtendrás un link como:<br>
-          <code style="background:var(--s1);padding:2px 6px;border-radius:4px;font-size:.72rem;">https://tuusuario.github.io/rt-envases/</code><br><br>
-          Cualquier técnico abre ese link en su celular sin descargar nada.
-        </p>
-        <div style="margin-top:10px;">
-          <button class="btn btn-share" onclick="abrirInstrucciones()">📖 Ver instrucciones</button>
-        </div>
-      </div>
-      <div style="background:var(--s2);border:1px solid var(--b2);border-radius:10px;padding:14px;">
-        <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;">📊 Google Sheets — ver todos los registros</div>
-        <p style="font-size:.78rem;color:var(--lbl);line-height:1.6;">
-          Todos los hallazgos registrados desde cualquier celular se guardan automáticamente en tu Google Sheets.
-        </p>
-        <button class="btn btn-share" style="margin-top:10px;" onclick="abrirSheets()">
-          📊 Abrir Google Sheets
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!-- LIGHTBOX -->
 <div class="lb" id="lb" onclick="closeLB()">
   <button class="lb-x">✕</button>
@@ -848,41 +803,6 @@ function exportExcel(){
   showToast('📥 Excel descargado');
 }
 
-// ══════════════════════════════════════════════════════
-// COMPARTIR
-// ══════════════════════════════════════════════════════
-function compartirArchivo(){
-  if(navigator.share){
-    navigator.share({
-      title:'Reparaciones Temporales · Envases Universales',
-      text:'App para registrar reparaciones temporales en planta',
-      url:window.location.href
-    }).catch(()=>{});
-  } else {
-    navigator.clipboard.writeText(window.location.href).then(()=>{
-      showToast('📋 Link copiado al portapapeles');
-    }).catch(()=>showToast('Comparte el archivo HTML por WhatsApp'));
-  }
-}
-
-function abrirSheets(){
-  window.open(SHEETS_URL.replace('/exec',''),'_blank');
-}
-
-function abrirInstrucciones(){
-  const msg=`INSTRUCCIONES — GITHUB PAGES
-
-1. Ve a github.com y crea cuenta gratis
-2. Crea un repositorio nuevo (público)
-3. Sube el archivo rt-envases-universales.html
-4. Ve a Settings → Pages → Source: main
-5. Tu link será:
-   https://TUUSUARIO.github.io/REPOSITORIO/rt-envases-universales.html
-
-Comparte ese link con tus técnicos.
-Cualquiera lo abre en Chrome desde su celular.`;
-  alert(msg);
-}
 
 // ══════════════════════════════════════════════════════
 // TOAST
