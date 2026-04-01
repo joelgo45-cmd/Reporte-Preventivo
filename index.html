@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<title>Reparaciones Temporales · Envases Universales</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700;800&family=Lexend+Mega:wght@700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0a0f;
+  --s1:#101018;
+  --s2:#16161f;
+  --s3:#1c1c28;
+  --b1:#252535;
+  --b2:#303048;
+  --ac:#e8642c;
+  --ac2:#c94f1e;
+  --teal:#0ea5a0;
+  --green:#16a34a;
+  --red:#dc2626;
+  --amber:#d97706;
+  --text:#f1f0ff;
+  --sub:#8b8aaa;
+  --lbl:#b0afc8;
+  --r:12px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+html,body{background:var(--bg);color:var(--text);font-family:'Lexend',sans-serif;min-height:100vh;overscroll-behavior:none;}
+
+/* ── NAV ── */
+.nav{display:flex;background:var(--s1);border-bottom:1px solid var(--b1);position:sticky;top:0;z-index:300;}
+.nb{flex:1;padding:12px 4px;background:none;border:none;color:var(--sub);
+  font-family:'Lexend',sans-serif;font-size:.72rem;font-weight:600;
+  letter-spacing:.08em;text-transform:uppercase;cursor:pointer;
+  border-bottom:2px solid transparent;transition:color .15s,border-color .15s;}
+.nb.on{color:var(--ac);border-bottom-color:var(--ac);}
+
+/* ── PANELS ── */
+.pnl{display:none;}.pnl.on{display:block;}
+
+/* ── HEADER ── */
+.hdr{
+  padding:18px 16px 14px;
+  background:linear-gradient(135deg,#130e06 0%,#1f1508 60%,#130e06 100%);
+  border-bottom:2px solid var(--ac2);
+  display:flex;align-items:center;gap:12px;
+}
+.hdr-ico{font-size:2.2rem;line-height:1;filter:drop-shadow(0 2px 8px rgba(232,100,44,.4));}
+.hdr h1{font-family:'Lexend Mega',sans-serif;font-size:1.2rem;font-weight:800;
+  color:var(--ac);letter-spacing:.02em;line-height:1.1;}
+.hdr p{font-size:.65rem;color:rgba(232,100,44,.55);letter-spacing:.12em;
+  text-transform:uppercase;margin-top:2px;}
+.hdr-badge{margin-left:auto;background:rgba(232,100,44,.1);border:1px solid rgba(232,100,44,.3);
+  border-radius:10px;padding:7px 13px;text-align:center;flex-shrink:0;}
+.hdr-badge .n{font-family:'JetBrains Mono',monospace;font-size:1.6rem;font-weight:700;
+  color:var(--ac);line-height:1;}
+.hdr-badge .l{font-size:.56rem;color:rgba(232,100,44,.55);letter-spacing:.1em;text-transform:uppercase;}
+
+/* ── FORM ── */
+.fw{max-width:640px;margin:0 auto;padding:16px 14px 80px;}
+.sec{background:var(--s1);border:1px solid var(--b1);border-radius:var(--r);
+  padding:16px;margin-bottom:14px;transition:border-color .2s;}
+.sec:focus-within{border-color:var(--b2);}
+.sh{font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ac);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.sh::after{content:'';flex:1;height:1px;background:var(--b1);}
+
+label{display:block;font-size:.72rem;color:var(--lbl);margin-bottom:4px;
+  margin-top:12px;font-weight:500;letter-spacing:.02em;}
+label:first-of-type{margin-top:0;}
+
+input[type=text],input[type=date],select,textarea{
+  width:100%;background:var(--s2);border:1px solid var(--b1);border-radius:8px;
+  color:var(--text);font-family:'Lexend',sans-serif;font-size:.88rem;
+  padding:10px 12px;outline:none;appearance:none;
+  transition:border-color .15s,box-shadow .15s;}
+input:focus,select:focus,textarea:focus{
+  border-color:var(--ac);box-shadow:0 0 0 3px rgba(232,100,44,.1);}
+textarea{resize:vertical;min-height:78px;line-height:1.55;}
+select option{background:var(--s2);}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+
+/* ── TOGGLE BUTTONS ── */
+.tg-group{display:flex;gap:7px;flex-wrap:wrap;}
+.tg{flex:1;min-width:70px;padding:9px 8px;border-radius:8px;
+  border:1px solid var(--b1);background:var(--s2);
+  color:var(--sub);font-size:.75rem;font-weight:600;
+  text-align:center;cursor:pointer;transition:all .14s;user-select:none;}
+.tg:hover{border-color:var(--ac);color:var(--text);}
+.tg.on{background:var(--ac);border-color:var(--ac);color:#fff;}
+
+/* impide */
+.imp-g{display:flex;gap:7px;}
+.imp{flex:1;padding:10px 6px;border-radius:8px;border:1px solid var(--b1);
+  background:var(--s2);color:var(--sub);font-size:.75rem;font-weight:600;
+  text-align:center;cursor:pointer;transition:all .14s;}
+.imp[data-v="total"].on{background:#3a1010;border-color:var(--red);color:#f87171;}
+.imp[data-v="parcial"].on{background:#3a2a08;border-color:var(--amber);color:#fbbf24;}
+.imp[data-v="no"].on{background:#0d2e1a;border-color:var(--green);color:#4ade80;}
+
+/* SAP */
+.sap-g{display:flex;gap:7px;}
+.sap{flex:1;padding:10px;border-radius:8px;border:1px solid var(--b1);
+  background:var(--s2);color:var(--sub);font-size:.78rem;font-weight:600;
+  text-align:center;cursor:pointer;transition:all .14s;}
+.sap.yes.on{background:#0d2e1a;border-color:var(--green);color:#4ade80;}
+.sap.no.on{background:#3a1010;border-color:var(--red);color:#f87171;}
+
+/* ── PHOTO ZONE ── */
+.pz{border:2px dashed var(--b2);border-radius:10px;padding:16px;
+  text-align:center;cursor:pointer;position:relative;transition:all .15s;}
+.pz:hover{border-color:var(--ac);background:rgba(232,100,44,.04);}
+.pz input[type=file]{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;}
+.pz .pi{font-size:1.8rem;margin-bottom:5px;}
+.pz .pl{font-size:.72rem;color:var(--sub);}
+.pz .pl b{color:var(--ac);}
+.pp{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+.pp img{width:84px;height:84px;object-fit:cover;border-radius:8px;
+  border:2px solid var(--b1);cursor:pointer;transition:all .14s;}
+.pp img:hover{border-color:var(--ac);transform:scale(1.05);}
+.pbadge{display:inline-flex;align-items:center;gap:5px;margin-top:8px;
+  background:rgba(232,100,44,.1);border:1px solid rgba(232,100,44,.2);
+  border-radius:20px;padding:4px 12px;font-size:.7rem;color:var(--ac);font-weight:600;}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  font-family:'Lexend',sans-serif;font-weight:700;font-size:.85rem;
+  letter-spacing:.04em;border:none;cursor:pointer;border-radius:10px;
+  padding:11px 20px;transition:all .15s;}
+.btn-main{background:var(--ac);color:#fff;width:100%;font-size:.98rem;
+  padding:15px;border-radius:11px;margin-top:6px;
+  box-shadow:0 4px 20px rgba(232,100,44,.3);}
+.btn-main:hover{background:var(--ac2);transform:translateY(-1px);}
+.btn-copy{background:rgba(22,163,74,.12);color:#4ade80;
+  border:1px solid rgba(22,163,74,.3);padding:13px 22px;width:100%;font-size:.95rem;}
+.btn-copy:hover{background:rgba(22,163,74,.22);}
+.btn-copy.done{background:rgba(22,163,74,.25);}
+.btn-nuevo{background:var(--s2);color:var(--sub);border:1px solid var(--b1);
+  padding:12px;width:100%;margin-top:8px;}
+.btn-nuevo:hover{color:var(--text);}
+.btn-exp{background:var(--s2);color:var(--lbl);border:1px solid var(--b1);padding:10px 18px;}
+.btn-exp:hover{border-color:var(--ac);color:var(--ac);}
+.btn-del2{background:rgba(220,38,38,.08);color:var(--red);
+  border:1px solid rgba(220,38,38,.2);padding:10px 18px;}
+
+/* ── WA SCREEN (full page) ── */
+.wa-screen{display:none;position:fixed;inset:0;z-index:400;
+  background:var(--bg);overflow-y:auto;flex-direction:column;}
+.wa-screen.on{display:flex;animation:slideUp .25s ease;}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;}}
+
+.wa-topbar{background:var(--s1);border-bottom:1px solid var(--b1);
+  padding:13px 16px;display:flex;align-items:center;gap:10px;
+  position:sticky;top:0;z-index:10;}
+.wa-av{width:36px;height:36px;border-radius:50%;background:#25d366;
+  display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.wa-gn{color:var(--text);font-weight:600;font-size:.85rem;}
+.wa-gs{color:var(--sub);font-size:.67rem;}
+
+.wa-body{flex:1;background:#0b141a;padding:14px 12px;}
+.wa-strip-lbl{font-size:.67rem;color:#8696a0;text-transform:uppercase;
+  letter-spacing:.06em;margin-bottom:6px;}
+.wa-strip{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px;}
+.wa-strip img{width:72px;height:72px;object-fit:cover;border-radius:7px;cursor:pointer;}
+.wa-bubble{background:#1e3a29;border-radius:0 12px 12px 12px;padding:12px 14px;
+  position:relative;box-shadow:0 1px 3px rgba(0,0,0,.4);}
+.wa-bubble::before{content:'';position:absolute;top:0;left:-7px;
+  border-width:0 7px 9px 0;border-style:solid;
+  border-color:transparent #1e3a29 transparent transparent;}
+.wa-bubble pre{white-space:pre-wrap;word-break:break-word;
+  font-family:'Lexend',sans-serif;font-size:.82rem;line-height:1.65;color:#e9edef;}
+.wa-foot{display:flex;align-items:center;justify-content:flex-end;gap:4px;margin-top:5px;}
+.wa-time{font-size:.67rem;color:#8696a0;}
+.wa-ticks{color:#53bdeb;font-size:.75rem;}
+
+.wa-actions{padding:14px;display:flex;flex-direction:column;gap:9px;
+  background:var(--s1);border-top:1px solid var(--b1);}
+
+/* ── COPY CONFIRM ── */
+.cc-overlay{display:none;position:fixed;inset:0;z-index:500;
+  background:rgba(0,0,0,.75);backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;flex-direction:column;gap:14px;}
+.cc-overlay.on{display:flex;}
+.cc-ico{font-size:4rem;animation:pop .3s cubic-bezier(.175,.885,.32,1.4);}
+@keyframes pop{from{transform:scale(0);}to{transform:scale(1);}}
+.cc-txt{font-family:'Lexend Mega',sans-serif;font-size:1.3rem;color:#fff;letter-spacing:.02em;}
+.cc-sub{font-size:.8rem;color:rgba(255,255,255,.55);}
+
+/* ── HISTORIAL ── */
+.db-wrap{padding:14px;}
+.db-bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:14px;}
+.db-total{margin-left:auto;background:var(--s2);border:1px solid var(--b1);
+  border-radius:20px;padding:5px 14px;font-size:.75rem;color:var(--sub);}
+.tbl-wrap{overflow-x:auto;border-radius:11px;border:1px solid var(--b1);}
+table{border-collapse:collapse;width:100%;min-width:720px;background:var(--s1);}
+thead tr{background:var(--s2);}
+th{padding:9px 11px;text-align:left;font-size:.65rem;font-weight:700;
+  letter-spacing:.12em;text-transform:uppercase;color:var(--sub);
+  white-space:nowrap;border-bottom:1px solid var(--b1);}
+tbody tr{border-bottom:1px solid var(--b1);transition:background .1s;}
+tbody tr:hover{background:var(--s2);}
+td{padding:8px 11px;font-size:.77rem;color:var(--text);vertical-align:top;}
+.id-c{font-family:'JetBrains Mono',monospace;font-size:.9rem;font-weight:700;color:var(--ac);}
+.pill{display:inline-block;padding:2px 9px;border-radius:20px;font-size:.67rem;font-weight:600;}
+.p-red{background:rgba(220,38,38,.15);color:#f87171;}
+.p-amber{background:rgba(217,119,6,.15);color:#fbbf24;}
+.p-green{background:rgba(22,163,74,.12);color:#4ade80;}
+.p-teal{background:rgba(14,165,160,.12);color:#2dd4bf;}
+.p-blue{background:rgba(59,130,246,.12);color:#93c5fd;}
+.del-btn{background:none;border:none;color:var(--sub);cursor:pointer;
+  font-size:1rem;padding:2px 5px;border-radius:4px;transition:color .12s;}
+.del-btn:hover{color:var(--red);}
+.empty{text-align:center;padding:48px 20px;color:var(--sub);}
+.empty .ei{font-size:3rem;margin-bottom:10px;}
+.empty p{font-size:.82rem;}
+
+/* ── LIGHTBOX ── */
+.lb{display:none;position:fixed;inset:0;z-index:999;
+  background:rgba(0,0,0,.93);align-items:center;justify-content:center;}
+.lb.on{display:flex;}
+.lb img{max-width:93vw;max-height:89vh;border-radius:10px;}
+.lb-x{position:absolute;top:14px;right:18px;font-size:2rem;
+  color:#fff;cursor:pointer;background:none;border:none;}
+
+/* ── TOAST ── */
+.toast{position:fixed;bottom:22px;left:50%;
+  transform:translateX(-50%) translateY(60px);
+  background:var(--s2);border:1px solid var(--b2);color:var(--text);
+  padding:11px 20px;border-radius:30px;font-size:.82rem;font-weight:500;
+  box-shadow:0 4px 24px rgba(0,0,0,.5);
+  transition:transform .28s cubic-bezier(.175,.885,.32,1.275);
+  z-index:9999;white-space:nowrap;}
+.toast.on{transform:translateX(-50%) translateY(0);}
+
+/* ── SHARE SECTION ── */
+.share-sec{background:var(--s2);border:1px solid var(--b2);border-radius:11px;
+  padding:14px;margin-bottom:14px;}
+.share-sec h3{font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--teal);margin-bottom:10px;}
+.share-url{background:var(--s1);border:1px solid var(--b1);border-radius:8px;
+  padding:9px 12px;font-family:'JetBrains Mono',monospace;font-size:.72rem;
+  color:var(--lbl);word-break:break-all;margin-bottom:8px;}
+.btn-share{background:rgba(14,165,160,.12);color:var(--teal);
+  border:1px solid rgba(14,165,160,.3);padding:9px 18px;
+  font-size:.8rem;}
+.btn-share:hover{background:rgba(14,165,160,.22);}
+
+@media(max-width:480px){
+  .g2{grid-template-columns:1fr;}
+  .hdr h1{font-size:1rem;}
+}
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <button class="nb on" onclick="goTab(this,'form')">🔧 Nuevo Hallazgo</button>
+  <button class="nb" onclick="goTab(this,'db')">🗄️ Historial</button>
+  <button class="nb" onclick="goTab(this,'share')">🔗 Compartir</button>
+</div>
+
+<!-- ═══════════════════════════ FORMULARIO ═══════════════════════════ -->
+<div class="pnl on" id="pnl-form">
+
+  <div class="hdr">
+    <div class="hdr-ico">🔧</div>
+    <div>
+      <h1>Reparación Temporal</h1>
+      <p>Envases Universales · Mantenimiento</p>
+    </div>
+    <div class="hdr-badge">
+      <div class="n" id="nextId">—</div>
+      <div class="l">Sig. #</div>
+    </div>
+  </div>
+
+  <div class="fw">
+
+    <!-- ① IDENTIFICACIÓN -->
+    <div class="sec">
+      <div class="sh">① Identificación</div>
+      <div class="g2">
+        <div>
+          <label>Línea</label>
+          <select id="linea">
+            <option value="">— Selecciona —</option>
+            <option>Línea 1</option><option>Línea 2</option>
+            <option>Línea 3</option><option>Línea 4</option>
+            <option>Línea 7</option><option>Línea 8</option>
+            <option>Paletizador L1</option><option>Paletizador L3</option>
+            <option>Paletizador L4</option><option>Paletizador L7y2</option>
+            <option>Paletizador L8</option><option>Área general</option>
+          </select>
+        </div>
+        <div>
+          <label>Máquina / Equipo</label>
+          <input type="text" id="maquina" placeholder="Ej. Soudronic BWM">
+        </div>
+      </div>
+      <div class="g2" style="margin-top:12px;">
+        <div>
+          <label>Detectada por</label>
+          <select id="tecnico">
+            <option value="">— Técnico —</option>
+            <option>ROSALES CAMACHO EDUARDO</option>
+            <option>COELLO HERNANDEZ CARLOS EDUARDO</option>
+            <option>JIMENEZ CORDOVA JONATHAN</option>
+            <option>VELAZCO DOMINGUEZ ANGEL ALBERTO</option>
+            <option>GUERRERO RUIZ DANIEL</option>
+            <option>MARQUEZ CAZARIN JOSE ANGEL</option>
+            <option>OBESO SOTO GILDARDO ERNESTO</option>
+            <option>ALCOCER DIAZ MARIO</option>
+            <option>PEREZ VAZQUEZ LORENZO</option>
+            <option>GARCIA GARCIA MIGUEL</option>
+            <option>ABELAR LOPEZ DANIEL DOMINGO</option>
+            <option>CAMARGO CRUZ ALDO SAUL</option>
+            <option>RAMIREZ LEYVA JULIO CESAR</option>
+            <option>HERRERA FLORES JESUS DAVID</option>
+            <option>LAZCANO VELAZQUEZ EDSON MISAEL</option>
+            <option>CASTAÑEDA PATRON EDDWAR ALEXIS</option>
+          </select>
+        </div>
+        <div>
+          <label>Fecha de detección</label>
+          <input type="date" id="fecha">
+        </div>
+      </div>
+    </div>
+
+    <!-- ② DESCRIPCIÓN -->
+    <div class="sec">
+      <div class="sh">② Descripción de la Reparación</div>
+      <label>¿Qué es la reparación temporal?</label>
+      <textarea id="descripcion" placeholder="Ej. Cable de sensor sujeto con brida plástica en lugar de conector original..."></textarea>
+      <label style="margin-top:14px;">¿Impide el funcionamiento adecuado?</label>
+      <div class="imp-g">
+        <div class="imp on" data-v="total">🔴 Sí, totalmente</div>
+        <div class="imp" data-v="parcial">🟡 Parcialmente</div>
+        <div class="imp" data-v="no">🟢 No impide</div>
+      </div>
+    </div>
+
+    <!-- ③ FOTO -->
+    <div class="sec">
+      <div class="sh">③ Foto de la Reparación</div>
+      <div class="pz">
+        <input type="file" id="fotoFile" accept="image/*" multiple onchange="cargaFotos(this)">
+        <div class="pi">📸</div>
+        <div class="pl">Toca para <b>tomar foto</b> o seleccionar</div>
+      </div>
+      <div id="fotoBadge"></div>
+      <div class="pp" id="fotoPreview"></div>
+    </div>
+
+    <!-- ④ MANTENIMIENTO + SAP -->
+    <div class="sec">
+      <div class="sh">④ Mantenimiento y SAP</div>
+      <label>Tipo de mantenimiento al que se encamina</label>
+      <div class="tg-group" id="mantGroup">
+        <div class="tg on" data-v="Correctivo">Correctivo</div>
+        <div class="tg" data-v="Preventivo">Preventivo</div>
+        <div class="tg" data-v="Mejora/Modificación">Mejora / Modificación</div>
+      </div>
+      <label style="margin-top:16px;">¿Tiene orden creada en SAP?</label>
+      <div class="sap-g">
+        <div class="sap yes on" data-v="Sí">✅ Sí</div>
+        <div class="sap no" data-v="No">❌ No</div>
+      </div>
+      <div id="sapNumWrap" style="margin-top:10px;">
+        <label>Número de orden SAP</label>
+        <input type="text" id="sapNum" placeholder="Ej. 1002345678"
+          style="font-family:'JetBrains Mono',monospace;letter-spacing:.05em;">
+      </div>
+      <label style="margin-top:14px;">Observaciones / plan de acción</label>
+      <textarea id="obs" placeholder="Refacción en pedido, fecha estimada de reparación definitiva..."></textarea>
+    </div>
+
+    <button class="btn btn-main" onclick="registrar()">
+      📲 Registrar y generar mensaje WhatsApp
+    </button>
+
+  </div>
+</div>
+
+<!-- ═══════════════════════════ PANTALLA WA ═══════════════════════════ -->
+<div class="wa-screen" id="waScreen">
+  <div class="wa-topbar">
+    <div class="wa-av">🏭</div>
+    <div>
+      <div class="wa-gn">MANTENIMIENTO · ENVASES UNIVERSALES</div>
+      <div class="wa-gs">Mensaje listo — copia y pega en WhatsApp</div>
+    </div>
+  </div>
+  <div class="wa-body">
+    <div id="waStripLbl" class="wa-strip-lbl" style="display:none;">📎 Fotos — adjuntar con el mensaje</div>
+    <div class="wa-strip" id="waStrip"></div>
+    <div class="wa-bubble">
+      <pre id="waMsg"></pre>
+      <div class="wa-foot">
+        <span class="wa-time" id="waTime"></span>
+        <span class="wa-ticks">✓✓</span>
+      </div>
+    </div>
+  </div>
+  <div class="wa-actions">
+    <button class="btn btn-copy" id="btnCopy" onclick="copiar()">📋 Copiar mensaje</button>
+    <button class="btn btn-nuevo" onclick="nuevo()">🧹 Limpiar y nuevo hallazgo</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ HISTORIAL ═══════════════════════════ -->
+<div class="pnl" id="pnl-db">
+  <div class="db-wrap">
+    <div class="db-bar">
+      <button class="btn btn-exp" onclick="exportExcel()">📥 Exportar Excel</button>
+      <button class="btn btn-del2" onclick="limpiarDB()">🗑 Limpiar todo</button>
+      <div class="db-total" id="dbTotal">0 registros</div>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr>
+          <th>#</th><th>Fecha</th><th>Línea</th><th>Máquina</th>
+          <th>Descripción</th><th>Impide</th><th>Mantenimiento</th>
+          <th>SAP</th><th>Orden SAP</th><th>Técnico</th><th></th>
+        </tr></thead>
+        <tbody id="dbBody"></tbody>
+      </table>
+    </div>
+    <div class="empty" id="emptyMsg">
+      <div class="ei">📭</div>
+      <p>Sin hallazgos registrados.<br>Ve a <b>Nuevo Hallazgo</b> para comenzar.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════ COMPARTIR ═══════════════════════════ -->
+<div class="pnl" id="pnl-share">
+  <div class="fw">
+    <div class="sec" style="margin-top:16px;">
+      <div class="sh">🔗 Link para compartir</div>
+      <p style="font-size:.8rem;color:var(--sub);line-height:1.6;margin-bottom:14px;">
+        Comparte este archivo HTML con otros técnicos. Cualquier persona que lo abra desde su celular
+        podrá registrar hallazgos que se guardarán automáticamente en el mismo Google Sheets.
+      </p>
+      <div style="background:var(--s2);border:1px solid var(--b2);border-radius:10px;padding:14px;margin-bottom:12px;">
+        <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;">📁 Opción 1 — Compartir el archivo HTML</div>
+        <p style="font-size:.78rem;color:var(--lbl);line-height:1.6;">
+          Envía el archivo <code style="background:var(--s1);padding:2px 6px;border-radius:4px;font-size:.75rem;">rt-envases-universales.html</code>
+          por WhatsApp o correo. El receptor lo abre en Chrome y funciona de inmediato.
+        </p>
+        <button class="btn btn-share" style="margin-top:10px;" onclick="compartirArchivo()">
+          📤 Compartir por WhatsApp
+        </button>
+      </div>
+      <div style="background:var(--s2);border:1px solid var(--b2);border-radius:10px;padding:14px;margin-bottom:12px;">
+        <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;">☁️ Opción 2 — Subir a GitHub Pages (link permanente)</div>
+        <p style="font-size:.78rem;color:var(--lbl);line-height:1.6;">
+          Sube el HTML a GitHub Pages y obtendrás un link como:<br>
+          <code style="background:var(--s1);padding:2px 6px;border-radius:4px;font-size:.72rem;">https://tuusuario.github.io/rt-envases/</code><br><br>
+          Cualquier técnico abre ese link en su celular sin descargar nada.
+        </p>
+        <div style="margin-top:10px;">
+          <button class="btn btn-share" onclick="abrirInstrucciones()">📖 Ver instrucciones</button>
+        </div>
+      </div>
+      <div style="background:var(--s2);border:1px solid var(--b2);border-radius:10px;padding:14px;">
+        <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--teal);margin-bottom:8px;">📊 Google Sheets — ver todos los registros</div>
+        <p style="font-size:.78rem;color:var(--lbl);line-height:1.6;">
+          Todos los hallazgos registrados desde cualquier celular se guardan automáticamente en tu Google Sheets.
+        </p>
+        <button class="btn btn-share" style="margin-top:10px;" onclick="abrirSheets()">
+          📊 Abrir Google Sheets
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lb" id="lb" onclick="closeLB()">
+  <button class="lb-x">✕</button>
+  <img id="lbImg" src="" alt="">
+</div>
+
+<!-- COPY CONFIRM -->
+<div class="cc-overlay" id="ccOverlay">
+  <div class="cc-ico">✅</div>
+  <div class="cc-txt">¡Mensaje copiado!</div>
+  <div class="cc-sub">Pégalo en tu grupo de WhatsApp</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════════════════
+// CONFIGURACIÓN
+// ══════════════════════════════════════════════════════
+const SHEETS_URL = 'https://script.google.com/macros/s/AKfycbwug4es1IVy4x0udfoeFr8m-1ilPfIJH5hyVJWuOqMPwTpJk2hBcWdfTHEjoILxlsC0/exec';
+const SHEETS_VIEW = 'https://docs.google.com/spreadsheets/';
+const DB_KEY = 'eu_rt_v1';
+
+// ══════════════════════════════════════════════════════
+// DB LOCAL
+// ══════════════════════════════════════════════════════
+function loadDB(){try{return JSON.parse(localStorage.getItem(DB_KEY))||[];}catch{return[];}}
+function saveDB(d){localStorage.setItem(DB_KEY,JSON.stringify(d));}
+function nextNum(){const db=loadDB();return db.length?Math.max(...db.map(r=>r.num))+1:1;}
+function updateBadge(){document.getElementById('nextId').textContent=String(nextNum()).padStart(4,'0');}
+
+// ══════════════════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════════════════
+document.addEventListener('DOMContentLoaded',function(){
+  const d=new Date();
+  document.getElementById('fecha').value=
+    d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  updateBadge();
+
+  // Toggle groups
+  document.querySelectorAll('.tg').forEach(o=>{
+    o.addEventListener('click',()=>{
+      o.closest('.tg-group').querySelectorAll('.tg').forEach(x=>x.classList.remove('on'));
+      o.classList.add('on');
+    });
+  });
+  document.querySelectorAll('.imp').forEach(o=>{
+    o.addEventListener('click',()=>{
+      document.querySelectorAll('.imp').forEach(x=>x.classList.remove('on'));
+      o.classList.add('on');
+    });
+  });
+  document.querySelectorAll('.sap').forEach(o=>{
+    o.addEventListener('click',()=>{
+      document.querySelectorAll('.sap').forEach(x=>x.classList.remove('on'));
+      o.classList.add('on');
+      document.getElementById('sapNumWrap').style.display=o.dataset.v==='Sí'?'block':'none';
+    });
+  });
+});
+
+// ══════════════════════════════════════════════════════
+// TABS
+// ══════════════════════════════════════════════════════
+function goTab(btn,tab){
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  document.querySelectorAll('.pnl').forEach(p=>p.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('pnl-'+tab).classList.add('on');
+  if(tab==='db') renderDB();
+}
+
+// ══════════════════════════════════════════════════════
+// FOTOS
+// ══════════════════════════════════════════════════════
+let fotoURLs=[];
+function cargaFotos(inp){
+  fotoURLs=[];
+  const pp=document.getElementById('fotoPreview');
+  const bd=document.getElementById('fotoBadge');
+  pp.innerHTML='';
+  [...inp.files].forEach(f=>{
+    const url=URL.createObjectURL(f);
+    fotoURLs.push(url);
+    const img=document.createElement('img');
+    img.src=url;img.onclick=()=>openLB(url);
+    pp.appendChild(img);
+  });
+  const n=inp.files.length;
+  bd.innerHTML=n>0?`<div class="pbadge">📎 ${n} foto${n>1?'s':''} cargada${n>1?'s':''}</div>`:'';
+}
+
+// ══════════════════════════════════════════════════════
+// LIGHTBOX
+// ══════════════════════════════════════════════════════
+function openLB(src){document.getElementById('lbImg').src=src;document.getElementById('lb').classList.add('on');}
+function closeLB(){document.getElementById('lb').classList.remove('on');}
+
+// ══════════════════════════════════════════════════════
+// REGISTRAR
+// ══════════════════════════════════════════════════════
+function registrar(){
+  const linea  = document.getElementById('linea').value;
+  const maq    = document.getElementById('maquina').value.trim();
+  const tec    = document.getElementById('tecnico').value;
+  const fecha  = document.getElementById('fecha').value;
+  const desc   = document.getElementById('descripcion').value.trim();
+  const impide = document.querySelector('.imp.on')?.dataset.v||'total';
+  const mant   = document.querySelector('.tg.on')?.dataset.v||'Correctivo';
+  const sapVal = document.querySelector('.sap.on')?.dataset.v||'No';
+  const sapNum = sapVal==='Sí'?(document.getElementById('sapNum').value.trim()||'—'):'—';
+  const obs    = document.getElementById('obs').value.trim();
+
+  if(!linea||!maq||!desc||!fecha){
+    showToast('⚠️ Completa: línea, máquina, descripción y fecha');return;
+  }
+
+  const num    = nextNum();
+  const numStr = String(num).padStart(4,'0');
+  const fechaF = fecha.split('-').reverse().join('/');
+
+  const impideLabel={total:'🔴 Sí, totalmente',parcial:'🟡 Parcialmente',no:'🟢 No impide'};
+  const mantIcon={Correctivo:'🔧',Preventivo:'📅','Mejora/Modificación':'✏️'};
+
+  // Guardar localmente
+  const rec={num,linea,maq,tec,fecha,desc,impide,mant,sapVal,sapNum,obs,
+    fotos:fotoURLs.length,ts:new Date().toISOString()};
+  const db=loadDB();db.push(rec);saveDB(db);
+  updateBadge();
+
+  // Enviar a Google Sheets
+  enviarSheets(rec,numStr);
+
+  // Construir mensaje WA
+  const msg=
+`🔧 *REPARACIÓN TEMPORAL #${numStr}*
+━━━━━━━━━━━━━━━━━━━━━━━
+📍 *Línea:* ${linea}
+⚙️ *Máquina:* ${maq}
+📅 *Fecha detectada:* ${fechaF}
+👷 *Detectada por:* ${tec||'—'}
+
+📋 *DESCRIPCIÓN:*
+${desc}
+
+⚠️ *¿Impide funcionamiento?*
+${impideLabel[impide]}
+
+${mantIcon[mant]} *Mantenimiento:* ${mant}
+🗂️ *Orden SAP:* ${sapVal==='Sí'?'✅ Sí — '+sapNum:'❌ No creada'}${obs?'\n\n📝 *Observaciones:*\n'+obs:''}${fotoURLs.length>0?'\n\n📎 *Fotos:* '+fotoURLs.length+' imagen'+(fotoURLs.length>1?'es':''):''}
+━━━━━━━━━━━━━━━━━━━━━━━
+_Envases Universales · RT-${numStr}_`;
+
+  // Poblar pantalla WA
+  document.getElementById('waMsg').textContent=msg;
+  const now=new Date();
+  document.getElementById('waTime').textContent=
+    String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+
+  const strip=document.getElementById('waStrip');
+  const slbl=document.getElementById('waStripLbl');
+  strip.innerHTML='';
+  if(fotoURLs.length>0){
+    slbl.style.display='block';
+    fotoURLs.forEach(u=>{
+      const img=document.createElement('img');img.src=u;img.onclick=()=>openLB(u);strip.appendChild(img);
+    });
+  } else { slbl.style.display='none'; }
+
+  // Mostrar pantalla WA
+  document.getElementById('waScreen').classList.add('on');
+  window.scrollTo({top:0});
+
+  // Auto-copiar
+  navigator.clipboard.writeText(msg).then(()=>{
+    showToast('✅ RT-'+numStr+' registrada y mensaje copiado');
+    const cc=document.getElementById('ccOverlay');
+    cc.classList.add('on');setTimeout(()=>cc.classList.remove('on'),2200);
+  }).catch(()=>{
+    showToast('✅ RT-'+numStr+' registrada — toca Copiar');
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// GOOGLE SHEETS
+// ══════════════════════════════════════════════════════
+function enviarSheets(rec,numStr){
+  if(!SHEETS_URL)return;
+  const payload={
+    num:rec.num,
+    clave:'RT-'+String(rec.num).padStart(4,'0'),
+    fecha:rec.fecha?rec.fecha.split('-').reverse().join('/'):'',
+    linea:rec.linea||'',
+    maquina:rec.maq||'',
+    tecnico:rec.tec||'',
+    descripcion:rec.desc||'',
+    impideFuncionamiento:({total:'Sí totalmente',parcial:'Parcialmente',no:'No impide'})[rec.impide]||'',
+    tipoMantenimiento:rec.mant||'',
+    ordenSAP:rec.sapVal||'',
+    numeroSAP:rec.sapNum!=='—'?rec.sapNum:'',
+    observaciones:rec.obs||'',
+    fotos:rec.fotos||0,
+    timestamp:rec.ts||new Date().toISOString()
+  };
+  fetch(SHEETS_URL,{
+    method:'POST',
+    mode:'no-cors',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body:JSON.stringify(payload)
+  }).catch(()=>{});
+}
+
+// ══════════════════════════════════════════════════════
+// COPIAR MANUAL
+// ══════════════════════════════════════════════════════
+function copiar(){
+  const txt=document.getElementById('waMsg').textContent;
+  navigator.clipboard.writeText(txt).then(()=>{
+    const b=document.getElementById('btnCopy');
+    b.textContent='✅ ¡Copiado!';b.classList.add('done');
+    setTimeout(()=>{b.textContent='📋 Copiar mensaje';b.classList.remove('done');},2500);
+    const cc=document.getElementById('ccOverlay');
+    cc.classList.add('on');setTimeout(()=>cc.classList.remove('on'),2000);
+  }).catch(()=>{
+    const ta=document.createElement('textarea');
+    ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';
+    document.body.appendChild(ta);ta.select();document.execCommand('copy');
+    document.body.removeChild(ta);
+    showToast('✅ Copiado');
+  });
+}
+
+// ══════════════════════════════════════════════════════
+// NUEVO
+// ══════════════════════════════════════════════════════
+function nuevo(){
+  document.getElementById('waScreen').classList.remove('on');
+  ['linea','tecnico'].forEach(id=>document.getElementById(id).value='');
+  ['maquina','descripcion','sapNum','obs'].forEach(id=>document.getElementById(id).value='');
+  document.getElementById('fotoPreview').innerHTML='';
+  document.getElementById('fotoBadge').innerHTML='';
+  document.getElementById('fotoFile').value='';
+  fotoURLs=[];
+  document.querySelectorAll('.imp').forEach((o,i)=>o.classList.toggle('on',i===0));
+  document.querySelectorAll('.tg').forEach((o,i)=>o.classList.toggle('on',i===0));
+  document.querySelectorAll('.sap').forEach((o,i)=>o.classList.toggle('on',i===0));
+  document.getElementById('sapNumWrap').style.display='block';
+  const d=new Date();
+  document.getElementById('fecha').value=
+    d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');
+  updateBadge();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ══════════════════════════════════════════════════════
+// RENDER HISTORIAL
+// ══════════════════════════════════════════════════════
+const impPill={
+  total:'<span class="pill p-red">Sí total</span>',
+  parcial:'<span class="pill p-amber">Parcial</span>',
+  no:'<span class="pill p-green">No impide</span>'
+};
+const mantPill={
+  Correctivo:'<span class="pill p-red">Correctivo</span>',
+  Preventivo:'<span class="pill p-blue">Preventivo</span>',
+  'Mejora/Modificación':'<span class="pill p-amber">Mejora/Mod.</span>'
+};
+
+function renderDB(){
+  const db=loadDB().sort((a,b)=>b.num-a.num);
+  const body=document.getElementById('dbBody');
+  const empty=document.getElementById('emptyMsg');
+  document.getElementById('dbTotal').textContent=db.length+' registro'+(db.length!==1?'s':'');
+  body.innerHTML='';
+  if(!db.length){empty.style.display='block';return;}
+  empty.style.display='none';
+  db.forEach(r=>{
+    const tr=document.createElement('tr');
+    const fd=r.fecha?r.fecha.split('-').reverse().join('/'):'—';
+    const sapD=r.sapVal==='Sí'
+      ?'<span class="pill p-green">Sí</span>'+(r.sapNum!=='—'?'<br><small style="font-family:\'JetBrains Mono\',monospace;font-size:.67rem;">'+r.sapNum+'</small>':'')
+      :'<span class="pill p-red">No</span>';
+    tr.innerHTML=`
+      <td class="id-c">RT-${String(r.num).padStart(4,'0')}</td>
+      <td>${fd}</td><td>${r.linea||'—'}</td>
+      <td style="font-size:.73rem;">${r.maq||'—'}</td>
+      <td style="max-width:180px;font-size:.72rem;">${(r.desc||'').length>70?(r.desc).slice(0,70)+'…':r.desc}</td>
+      <td>${impPill[r.impide]||r.impide}</td>
+      <td>${mantPill[r.mant]||r.mant}</td>
+      <td>${sapD}</td>
+      <td style="font-family:'JetBrains Mono',monospace;font-size:.72rem;">${r.sapNum!=='—'?r.sapNum:''}</td>
+      <td style="font-size:.72rem;">${r.tec||'—'}</td>
+      <td><button class="del-btn" onclick="delRec(${r.num})">🗑</button></td>`;
+    body.appendChild(tr);
+  });
+}
+
+function delRec(num){
+  if(!confirm('¿Eliminar RT-'+String(num).padStart(4,'0')+'?'))return;
+  saveDB(loadDB().filter(r=>r.num!==num));renderDB();updateBadge();
+  showToast('Registro eliminado');
+}
+function limpiarDB(){
+  if(!confirm('¿Borrar TODA la base de datos local?'))return;
+  localStorage.removeItem(DB_KEY);renderDB();updateBadge();showToast('Base limpiada');
+}
+
+// ══════════════════════════════════════════════════════
+// EXPORT EXCEL
+// ══════════════════════════════════════════════════════
+function exportExcel(){
+  if(typeof XLSX==='undefined'){showToast('⚠️ Exportar no disponible sin conexión');return;}
+  const db=loadDB().sort((a,b)=>a.num-b.num);
+  if(!db.length){showToast('Sin datos para exportar');return;}
+  const hdr=['#','Clave','Fecha','Línea','Máquina','Técnico','Descripción',
+    'Impide Funcionamiento','Tipo Mantenimiento','SAP Creado','Orden SAP','Observaciones','Fotos'];
+  const impL={total:'Sí totalmente',parcial:'Parcialmente',no:'No impide'};
+  const rows=db.map(r=>[
+    r.num,'RT-'+String(r.num).padStart(4,'0'),
+    r.fecha?r.fecha.split('-').reverse().join('/'):'',
+    r.linea||'',r.maq||'',r.tec||'',r.desc||'',
+    impL[r.impide]||r.impide||'',r.mant||'',r.sapVal||'',
+    r.sapNum!=='—'?r.sapNum:'',r.obs||'',r.fotos||0
+  ]);
+  const ws=XLSX.utils.aoa_to_sheet([hdr,...rows]);
+  ws['!cols']=[{wch:5},{wch:9},{wch:12},{wch:14},{wch:22},{wch:26},{wch:45},
+    {wch:18},{wch:16},{wch:10},{wch:14},{wch:40},{wch:6}];
+  hdr.forEach((_,i)=>{
+    const c=XLSX.utils.encode_cell({r:0,c:i});if(!ws[c])return;
+    ws[c].s={fill:{fgColor:{rgb:'0A0A0F'}},font:{bold:true,color:{rgb:'E8642C'},sz:10},
+      alignment:{horizontal:'center',wrapText:true},
+      border:{bottom:{style:'medium',color:{rgb:'E8642C'}}}};
+  });
+  rows.forEach((_,ri)=>{
+    hdr.forEach((__,ci)=>{
+      const c=XLSX.utils.encode_cell({r:ri+1,c:ci});if(!ws[c])return;
+      ws[c].s={fill:{fgColor:{rgb:ri%2===0?'FFFFFF':'F5F5F8'}},
+        alignment:{vertical:'top',wrapText:true},font:{sz:9}};
+    });
+  });
+  const wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,'Reparaciones Temporales',ws);
+
+  // Resumen
+  const db2=loadDB();
+  const summary=[
+    ['REPARACIONES TEMPORALES — ENVASES UNIVERSALES'],
+    ['Generado:',new Date().toLocaleString('es-MX')],
+    ['Total hallazgos:',db2.length],[],
+    ['Impide totalmente:',db2.filter(r=>r.impide==='total').length],
+    ['Impide parcialmente:',db2.filter(r=>r.impide==='parcial').length],
+    ['No impide:',db2.filter(r=>r.impide==='no').length],[],
+    ['Sin orden SAP:',db2.filter(r=>r.sapVal==='No').length],
+    ['Con orden SAP:',db2.filter(r=>r.sapVal==='Sí').length],[],
+    ['Correctivo:',db2.filter(r=>r.mant==='Correctivo').length],
+    ['Preventivo:',db2.filter(r=>r.mant==='Preventivo').length],
+    ['Mejora/Modificación:',db2.filter(r=>r.mant==='Mejora/Modificación').length],
+  ];
+  const ws2=XLSX.utils.aoa_to_sheet(summary);
+  ws2['!cols']=[{wch:30},{wch:14}];
+  XLSX.utils.book_append_sheet(wb,'Resumen',ws2);
+
+  const d=new Date();
+  const ds=d.getFullYear()+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
+  XLSX.writeFile(wb,'RT_EnvasesUniversales_'+ds+'.xlsx');
+  showToast('📥 Excel descargado');
+}
+
+// ══════════════════════════════════════════════════════
+// COMPARTIR
+// ══════════════════════════════════════════════════════
+function compartirArchivo(){
+  if(navigator.share){
+    navigator.share({
+      title:'Reparaciones Temporales · Envases Universales',
+      text:'App para registrar reparaciones temporales en planta',
+      url:window.location.href
+    }).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(window.location.href).then(()=>{
+      showToast('📋 Link copiado al portapapeles');
+    }).catch(()=>showToast('Comparte el archivo HTML por WhatsApp'));
+  }
+}
+
+function abrirSheets(){
+  window.open(SHEETS_URL.replace('/exec',''),'_blank');
+}
+
+function abrirInstrucciones(){
+  const msg=`INSTRUCCIONES — GITHUB PAGES
+
+1. Ve a github.com y crea cuenta gratis
+2. Crea un repositorio nuevo (público)
+3. Sube el archivo rt-envases-universales.html
+4. Ve a Settings → Pages → Source: main
+5. Tu link será:
+   https://TUUSUARIO.github.io/REPOSITORIO/rt-envases-universales.html
+
+Comparte ese link con tus técnicos.
+Cualquiera lo abre en Chrome desde su celular.`;
+  alert(msg);
+}
+
+// ══════════════════════════════════════════════════════
+// TOAST
+// ══════════════════════════════════════════════════════
+function showToast(msg,ms=2700){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('on');
+  setTimeout(()=>t.classList.remove('on'),ms);
+}
+</script>
+
+<!-- XLSX con fallback -->
+<script>
+(function(){
+  function loadXLSX(url,fallback){
+    var s=document.createElement('script');s.src=url;s.crossOrigin='anonymous';
+    s.onerror=function(){if(fallback){var s2=document.createElement('script');
+      s2.src=fallback;document.head.appendChild(s2);}};
+    document.head.appendChild(s);
+  }
+  loadXLSX(
+    'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js',
+    'https://unpkg.com/xlsx@0.18.5/dist/xlsx.full.min.js'
+  );
+})();
+</script>
+
+</body>
+</html>
